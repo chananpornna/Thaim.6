@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="สื่อการเรียนรู้ภาษาไทย 6 เรื่องการวิเคราะห์ วิจารณ์วรรณคดีและสังเคราะห์ข้อคิดจากวรรณคดี - Thai Literature Interactive Quiz">
+    <title>การวิเคราะห์ วิจารณ์วรรณคดีและสังเคราะห์ข้อคิดจากวรรณคดี - Thai Quiz</title>
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📜</text></svg>">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt for Thai text -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax for LaTeX Rendering -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        html,
+        body {
+            overflow-x: hidden !important;
+            max-width: 100vw;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 50%, #f3e8ff 100%);
+            min-height: 100vh;
+        }
+
+        main {
+            overflow-x: hidden !important;
+            max-width: 100%;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d946ef;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c084fc;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-correct {
+            animation: celebrate 0.6s ease-in-out, bounceIn 0.5s ease-out;
+        }
+
+        .result-incorrect {
+            animation: shake 0.5s ease-in-out, bounceIn 0.3s ease-out;
+        }
+
+        @keyframes celebrate {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            25% {
+                transform: scale(1.1) rotate(-5deg);
+            }
+
+            75% {
+                transform: scale(1.1) rotate(5deg);
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .result-icon {
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        /* Loading State */
+        .mathjax-loading {
+            position: relative;
+            min-height: 40px;
+        }
+
+        .btn-hitech {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(217, 70, 239, 0.2), 0 2px 4px -1px rgba(217, 70, 239, 0.1);
+        }
+
+        .btn-hitech:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(217, 70, 239, 0.3), 0 4px 6px -2px rgba(217, 70, 239, 0.1);
+        }
+
+        .btn-hitech:active {
+            transform: translateY(0);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+        }
+
+        /* MathJax Adjustments - Responsive */
+        mjx-container {
+            font-size: 100% !important;
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+        }
+
+        @media (min-width: 640px) {
+            mjx-container {
+                font-size: 110% !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            mjx-container {
+                font-size: 120% !important;
+            }
+        }
+
+        /* Touch-friendly buttons on mobile */
+        @media (max-width: 640px) {
+
+            button,
+            .btn-hitech {
+                min-height: 44px;
+            }
+        }
+
+        /* Enhanced Focus Indicators */
+        *:focus-visible {
+            outline: 3px solid #d946ef;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        #examples-container .mathjax-loading mjx-container {
+            display: block !important;
+            margin: 1em auto !important;
+            text-align: center;
+            max-width: 100%;
+            overflow-x: visible;
+        }
+
+        /* Hamburger Menu Transition */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        #mobile-menu.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-pink-100">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo & Brand -->
+                <div class="flex items-center cursor-pointer" onclick="showSection('home')">
+                    <i class="fa-solid fa-scroll text-fuchsia-600 text-2xl sm:text-3xl mr-2"></i>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2 leading-tight">
+                        <span
+                            class="font-bold text-sm sm:text-lg md:text-xl text-purple-950 tracking-wide">นวัตกรรมการเรียนรู้วรรณคดีไทย</span>
+                        <span class="hidden sm:inline text-purple-300">|</span>
+                        <span
+                            class="text-xs sm:text-base md:text-lg text-fuchsia-600 font-medium">สามัคคีเภทคำฉันท์</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden sm:flex items-center space-x-4">
+                    <button onclick="showSection('home')"
+                        class="text-slate-600 hover:text-fuchsia-600 transition px-3 py-2 rounded-md text-sm font-medium hover:bg-fuchsia-50">
+                        <i class="fa-solid fa-house mr-1"></i> หน้าแรก
+                    </button>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <div class="flex sm:hidden">
+                    <button onclick="toggleMobileMenu()"
+                        class="text-slate-600 hover:text-fuchsia-600 focus:outline-none p-2" aria-label="เมนูหลัก">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="bg-white border-t border-slate-100 sm:hidden">
+            <div class="px-4 py-3 space-y-3">
+                <button onclick="showSection('home'); toggleMobileMenu()"
+                    class="block w-full text-left text-slate-700 hover:text-fuchsia-600 font-medium py-2 border-b border-slate-50">
+                    <i class="fa-solid fa-house mr-2 text-fuchsia-500"></i> กลับหน้าแรก
+                </button>
+                <!-- Info Section inside Hamburger for Mobile -->
+                <div class="pt-2 text-xs text-slate-500 space-y-2">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-book text-pink-500 w-5"></i>
+                        <span>รายวิชา ภาษาไทย 6 (ท33102)</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-graduation-cap text-purple-500 w-5"></i>
+                        <span>ระดับชั้นมัธยมศึกษาปีที่ 6</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-chalkboard-user text-fuchsia-500 w-5"></i>
+                        <span>ครูผู้สอน: นางสาวชนัญพร ณรงค์ทิพย์</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Info (Desktop/Tablet Only) -->
+    <div class="hidden sm:block bg-gradient-to-r from-pink-100 via-purple-100 to-fuchsia-100 border-b border-pink-200">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-2 text-center sm:text-left">
+                <div class="text-xs sm:text-sm text-purple-900">
+                    <i class="fa-solid fa-book text-fuchsia-600 mr-1"></i>
+                    <span class="font-medium">รายวิชา ภาษาไทย 6</span>
+                    <span class="mx-1 sm:mx-2 text-purple-300">|</span>
+                    <span class="font-mono">รหัสวิชา ท33102</span>
+                </div>
+                <div class="text-xs sm:text-sm text-purple-900">
+                    <i class="fa-solid fa-graduation-cap text-purple-600 mr-1"></i>
+                    <span>ระดับชั้นมัธยมศึกษาปีที่ 6</span>
+                </div>
+                <div class="text-xs sm:text-sm text-purple-900">
+                    <i class="fa-solid fa-chalkboard-user text-pink-600 mr-1"></i>
+                    <span class="font-medium">ครูผู้สอน:</span> <span>นางสาวชนัญพร ณรงค์ทิพย์</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto p-3 sm:p-4 md:p-6 mb-6 sm:mb-10">
+
+        <!-- SECTION: HOME -->
+        <section id="home"
+            class="fade-in min-h-[70vh] sm:min-h-[80vh] flex flex-col items-center justify-center text-center py-4 sm:py-6">
+            <div
+                class="bg-white/95 rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-16 relative overflow-hidden max-w-4xl w-full border border-pink-200">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-400 via-purple-500 to-fuchsia-600"></div>
+
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-purple-950 mb-3 sm:mb-4 px-2 leading-tight font-prompt">
+                    ถอดรหัสกลอุบาย & สังเคราะห์ข้อคิดวรรณคดี
+                </h1>
+                <p class="text-base sm:text-lg text-fuchsia-700 font-medium mb-6 sm:mb-8 md:mb-10 px-2">
+                    ภารกิจไขปริศนาทางจิตวิทยา วรรณศิลป์ และคติธรรมใน "สามัคคีเภทคำฉันท์"
+                </p>
+
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-8 sm:mb-10 md:mb-12">
+                    <button onclick="showSection('learn')"
+                        class="btn-hitech bg-white border-2 border-pink-200 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl flex flex-col items-center hover:border-fuchsia-500 hover:bg-fuchsia-50 active:scale-95 group focus:ring-2 focus:ring-fuchsia-500 focus:outline-none">
+                        <div
+                            class="bg-pink-100 text-fuchsia-600 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl mb-3 sm:mb-4 group-hover:bg-fuchsia-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3 class="font-semibold text-base sm:text-lg text-purple-950">เรียนรู้หลักวิจารณ์</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1 sm:mt-2">แนวคิด จิตวิทยา & วรรณศิลป์</p>
+                    </button>
+
+                    <button onclick="setupGroupQuiz()"
+                        class="btn-hitech bg-white border-2 border-pink-200 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl flex flex-col items-center hover:border-purple-500 hover:bg-purple-50 active:scale-95 group focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        <div
+                            class="bg-purple-100 text-purple-600 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl mb-3 sm:mb-4 group-hover:bg-purple-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
+                            <i class="fa-solid fa-chess-knight font-bold"></i>
+                        </div>
+                        <h3 class="font-semibold text-base sm:text-lg text-purple-950">เกมกลยุทธ์กลุ่ม</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1 sm:mt-2">สุ่ม 4 ฉากสืบสวนและแก้กลอุบาย</p>
+                    </button>
+
+                    <button onclick="setupSoloQuiz()"
+                        class="btn-hitech bg-white border-2 border-pink-200 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl flex flex-col items-center hover:border-pink-500 hover:bg-pink-50 active:scale-95 group sm:col-span-2 lg:col-span-1 focus:ring-2 focus:ring-pink-500 focus:outline-none">
+                        <div
+                            class="bg-pink-100 text-pink-600 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl mb-3 sm:mb-4 group-hover:bg-pink-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
+                            <i class="fa-solid fa-user-ninja"></i>
+                        </div>
+                        <h3 class="font-semibold text-base sm:text-lg text-purple-950">ทดสอบวิเคราะห์เดี่ยว</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1 sm:mt-2">ประเมินดรรชนีการตัดสินใจ</p>
+                    </button>
+                </div>
+
+                <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-pink-100">
+                    <p class="text-slate-500 text-xs sm:text-sm font-light px-2">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1 text-fuchsia-500"></i> ออกแบบสื่อการเรียนรู้โดย: <span
+                            class="text-fuchsia-700 font-bold">นางสาวชนัญพร ณรงค์ทิพย์</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: LEARN -->
+        <section id="learn" class="hidden fade-in">
+            <div class="mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3 flex-wrap">
+                <button onclick="showSection('home')"
+                    class="bg-white p-2 sm:p-2.5 rounded-full shadow hover:bg-fuchsia-50 text-purple-900 text-sm sm:text-base focus:ring-2 focus:ring-fuchsia-500">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-purple-950">หลักการวิเคราะห์ วิจารณ์วรรณคดีและสังเคราะห์ข้อคิด</h2>
+            </div>
+
+            <!-- Concept Card -->
+            <div
+                class="glass-panel p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl shadow-sm mb-4 sm:mb-6 border-l-4 border-fuchsia-500">
+                <h3 class="text-lg sm:text-xl font-bold text-purple-900 mb-2"><i
+                        class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>กระบวนการวิเคราะห์วรรณคดีเชิงศิลป์และวิจารณญาณ</h3>
+                <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+                    การศึกษาเรื่อง <span class="font-bold text-fuchsia-700">"สามัคคีเภทคำฉันท์"</span> เน้นการวิเคราะห์จิตวิทยาการล่อลวงของวัสสการพราหมณ์ โครงสร้างลีลาคำประพันธ์ (ฉันท์ 18 ชนิด) และการสังเคราะห์ข้อคิดเตือนใจเรื่องการขาดวิจารณญาณ โดยมีสมการเชิงแนวคิดเป็นเข็มทิศในการอ่าน:<br>
+                <div class="text-center my-3 sm:my-4 text-base sm:text-lg overflow-x-hidden font-bold text-purple-900 bg-purple-50/80 p-3 rounded-xl border border-purple-200">
+                    $$ \text{คุณค่าวรรณคดี} = \text{ลีลาวรรณศิลป์} + \text{จิตวิทยาตัวละคร} + \text{หลักอปริหานิยธรรม 7} $$
+                </div>
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-3 sm:mt-4">
+                    <div class="bg-pink-50 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-pink-200">
+                        <div class="font-bold text-sm sm:text-base text-pink-700"><i class="fa-solid fa-feather-pointed mr-1"></i> 1. ด้านวรรณศิลป์</div>
+                        <div class="text-xs sm:text-sm text-slate-600 mt-1">วิเคราะห์รสวรรณคดี จังหวะครุ-ลหุ ในอินทรวิเชียรฉันท์ สัททุลวิกกีฬิตฉันท์ ฯลฯ</div>
+                    </div>
+                    <div class="bg-purple-50 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-purple-200">
+                        <div class="font-bold text-sm sm:text-base text-purple-700"><i class="fa-solid fa-masks-theater mr-1"></i> 2. ด้านจิตวิทยาตัวละคร</div>
+                        <div class="text-xs sm:text-sm text-slate-600 mt-1">วิเคราะห์กลอุบายเสี้ยมสอน การปล่อยข่าวลือ และการกระตุ้นปมทิฐิในจิตใจ</div>
+                    </div>
+                    <div
+                        class="bg-fuchsia-50 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-fuchsia-200 sm:col-span-2 lg:col-span-1">
+                        <div class="font-bold text-sm sm:text-base text-fuchsia-700"><i class="fa-solid fa-brain mr-1"></i> 3. สังเคราะห์ข้อคิด</div>
+                        <div class="text-xs sm:text-sm text-slate-600 mt-1">ประยุกต์ใช้วิจารณญาณในการรับสื่อ การไตร่ตรองข่าวลือ และการสร้างสมานัตตตา</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examples -->
+            <div class="space-y-4 sm:space-y-6">
+                <h3 class="text-base sm:text-lg font-bold text-purple-950 ml-1 sm:ml-2">ตัวอย่างกรณีศึกษาการถอดรหัสกลยุทธ์วรรณคดี</h3>
+
+                <!-- Example Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 md:gap-6" id="examples-container">
+                    <!-- Example items will be injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: GROUP QUIZ -->
+        <section id="group-quiz" class="hidden fade-in">
+            <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                    <button onclick="showSection('home')"
+                        class="bg-white p-2 sm:p-2.5 rounded-full shadow hover:bg-fuchsia-50 text-purple-900 text-sm sm:text-base focus:ring-2 focus:ring-fuchsia-500">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-purple-950">เกมกลยุทธ์กลุ่ม (Group Strategy Challenge)</h2>
+                </div>
+                <button onclick="setupGroupQuiz()"
+                    class="btn-hitech bg-fuchsia-600 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-lg hover:bg-fuchsia-700 active:scale-95 text-sm sm:text-base w-full sm:w-auto focus:ring-2 focus:ring-fuchsia-300">
+                    <i class="fa-solid fa-shuffle mr-2"></i> สุ่มสถานการณ์ใหม่
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 md:gap-6" id="group-quiz-container">
+                <!-- Group cards generated by JS -->
+            </div>
+        </section>
+
+        <!-- SECTION: SOLO QUIZ -->
+        <section id="solo-quiz" class="hidden fade-in">
+            <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                    <button onclick="showSection('home')"
+                        class="bg-white p-2 sm:p-2.5 rounded-full shadow hover:bg-fuchsia-50 text-purple-900 text-sm sm:text-base focus:ring-2 focus:ring-fuchsia-500">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-purple-950">ทดสอบวิเคราะห์เดี่ยว (Solo Assessment)</h2>
+                </div>
+                <!-- เพิ่มปุ่ม Refresh สำหรับ Solo Quiz -->
+                <button onclick="setupSoloQuiz()"
+                    class="btn-hitech bg-purple-600 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-lg hover:bg-purple-700 active:scale-95 text-sm sm:text-base w-full sm:w-auto focus:ring-2 focus:ring-purple-300">
+                    <i class="fa-solid fa-shuffle mr-2"></i> สุ่มภารกิจใหม่
+                </button>
+            </div>
+
+            <div class="max-w-2xl mx-auto" id="solo-quiz-container">
+                <!-- Solo card generated by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JS LOGIC -->
+    <script>
+        // --- MOBILE MENU LOGIC ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('open')) {
+                menu.classList.remove('open');
+            } else {
+                menu.classList.add('open');
+            }
+        }
+
+        // --- CONSTANTS ---
+        // scenariosBase designed for Thai Literature / Arts & Social Students (Roleplay / Decision-based with N parameter mapping)
+        const scenariosBase = [
+            {
+                id: 'vassakara_psychology',
+                type: 'วิเคราะห์จิตวิทยาตัวละคร',
+                title: 'ภารกิจถอดรหัสกลอุบายถามคำถามไร้สาระ',
+                desc: 'วัสสการพราหมณ์เรียกพระโอรสกษัตริย์ลิจฉวีเข้าไปพบทีละคนในห้องลับ แล้วถามคำถามง่ายๆ เช่น "ชาวนาไถนาใช้กี่ตัว" หากลำดับเหตุการณ์การเรียกลูกกษัตริย์เกิดขึ้นเป็นองค์ที่ <b>[N]</b> (จาก 8 องค์) อยากทราบว่า "ระดับความสงสัยเคลือบแคลงในหมู่กษัตริย์ลิจฉวี" ที่เพิ่มขึ้นตามลำดับเป็นทางเลือกคำตอบในดรรชนีใด? (กดพิมพ์หมายเลขทางเลือกที่ถูกต้อง: 1 = ความระแวงระดับต่ำสุด, 2 = เกิดความริษยา, 3 = เกิดความสงสัยขั้นรุนแรงว่ามีความลับร่วมกัน)',
+                varUnit: 'ลำดับองค์ที่สุ่ม',
+                ansUnit: 'ระดับทางเลือก (1-3)',
+                solve: (n) => {
+                    // Logic: ลำดับยิ่งมาก ความระแวงยิ่งสูง ถ้า N <= 2 คือ 1, N 3-5 คือ 2, N >= 6 คือ 3
+                    if (n <= 2) return 1;
+                    if (n <= 5) return 2;
+                    return 3;
+                },
+                formula: '$$ \\text{ดรรชนีความระแวง}(N) = \\begin{cases} 1 & \\text{เมื่อ } N \\le 2 \\text{ (ระแวงเริ่มต้น)} \\\\ 2 & \\text{เมื่อ } 3 \\le N \\le 5 \\text{ (เกิดความริษยา)} \\\\ 3 & \\text{เมื่อ } N \\ge 6 \\text{ (แตกความสามัคคีสมบูรณ์)} \\end{cases} $$'
+            },
+            {
+                id: 'aparihaniyadhamma_rules',
+                type: 'สังเคราะห์หลักธรรมการปกครอง',
+                title: 'ประเมินการละเลยหลักอปริหานิยธรรม 7',
+                desc: 'กษัตริย์ลิจฉวีละเลยการประชุมเนื่องจากต่างองค์ทรงทิฐิ หากข้อธรรมที่ถูกละเลยในสถานการณ์นี้ตรงกับ อปริหานิยธรรม ข้อที่ <b>[N]</b> (เช่น ข้อ 1 = ประชุมกันเนืองนิตย์, ข้อ 2 = ประชุมและเลิกประชุมพร้อมเพรียง) จงเลือกดรรชนีผลลัพธ์ที่จะเกิดขึ้นกับเมืองเวสาลี (พิมพ์: 1 = เกิดความตระหนก, 2 = ขาดการประสานงานยุทธศาสตร์, 3 = เมืองพินาศพ่ายแพ้สงคราม)',
+                varUnit: 'ข้อธรรม',
+                ansUnit: 'ดรรชนีผลลัพธ์ (1-3)',
+                solve: (n) => {
+                    // ถ้าละเลยข้อ 1 ให้ตอบ 2 (ขาดการประสานงาน), ข้อ 2 ให้ตอบ 3 (เมืองพินาศ), ข้ออื่นตอบ 1
+                    if (n === 1) return 2;
+                    if (n === 2) return 3;
+                    return 1;
+                },
+                formula: '$$ \\text{ผลลัพธ์การละเลยข้อที่ } N \\Rightarrow \\text{ละเลยการประชุมพร้อมเพรียง }(N=2) = \\text{ดรรชนี 3 (ภัยพิบัติแห่งแผ่นดิน)} $$'
+            },
+            {
+                id: 'prosody_chan_rhythm',
+                type: 'วิเคราะห์ลีลาฉันทลักษณ์',
+                title: 'ถอดรหัสจังหวะ ครุ-ลหุ ในอินทรวิเชียรฉันท์ 11',
+                desc: 'อินทรวิเชียรฉันท์ 11 มีโครงสร้าง "ครุ-ครุ-ลหุ-ครุ-ครุ ... " ในการแต่งบทฉันท์บรรยายความขัดแย้งจำนวน <b>[N]</b> บาท (คำประพันธ์) หาก 1 บาท มีคำครุ 7 คำ และ คำลหุ 4 คำ จงคำนวณสัดส่วนดรรชนีรวมของคำลหุที่ใช้ออกเสียงเบาพริ้วไหวใน [N] บาทดังกล่าว (คำนวณจำนวนคำลหุรวม)',
+                varUnit: 'บาท',
+                ansUnit: 'จำนวนคำลหุรวม',
+                solve: (n) => {
+                    return n * 4;
+                },
+                formula: '$$ \\text{จำนวนคำลหุรวม} = N \\times 4 = [N] \\times 4 \\text{ (คำลหุสะท้อนจังหวะพริ้วไหว)} $$'
+            },
+            {
+                id: 'critical_thinking_fake_news',
+                type: 'การประยุกต์ใช้ข้อคิดในชีวิตจริง',
+                title: 'วิเคราะห์การรับมือกับ ข่าวลือ (Fake News)',
+                desc: 'หากนักเรียนสวมบทบาทเป็นที่ปรึกษาเมืองเวสาลี เมื่อมีข่าวลือเสี้ยมสอนในวงข่าว <b>[N]</b> ช่องทาง ทางเลือกที่ดีที่สุดในการแก้ปัญหาการหูเบาตามหลักกาลามสูตรคือทางเลือกใด? (พิมพ์: 1 = เชื่อทันทีตามกระแส, 2 = ตรวจสอบข้อเท็จจริงและเปิดเวทีเจรจาตรง, 3 = ปล่อยข่าวลือตอบโต้)',
+                varUnit: 'ช่องทางข่าวลือ',
+                ansUnit: 'ทางเลือกที่ถูกต้อง (หมายเลข)',
+                solve: (n) => {
+                    // คำตอบที่ถูกต้องทางจริยศาสตร์และภาษาไทยเสมอคือ ทางเลือกที่ 2
+                    return 2;
+                },
+                formula: '$$ \\text{ภูมิคุ้มกันข่าวลือ} = \\text{กาลามสูตร} + \\text{เวทีเจรจาตรง} \\Rightarrow \\text{ทางเลือกที่ 2 เท่านั้น} $$'
+            },
+            {
+                id: 'vassakara_exile_drama',
+                type: 'วิเคราะห์โครงเรื่องและการผูกปม',
+                title: 'การละเล่นละครตบตาฉากถูกโบยและเนรเทศ',
+                desc: 'วัสสการพราหมณ์ยอมถูกโบยและโกนศีรษะเนรเทศออกจากเมืองราชคฤห์ หากในฉากนี้ใช้อารมณ์สะเทือนใจในสัททุลวิกกีฬิตฉันท์ 19 จำนวน <b>[N]</b> บท จงหาจำนวนพยางค์รวมที่กษัตริย์ลิจฉวีได้ยินและหลงเชื่อ (1 บทมี 19 พยางค์)',
+                varUnit: 'บท',
+                ansUnit: 'จำนวนพยางค์รวม',
+                solve: (n) => {
+                    return n * 19;
+                },
+                formula: '$$ \\text{จำนวนพยางค์รวม} = N \\times 19 = [N] \\times 19 \\text{ พยางค์} $$'
+            },
+            {
+                id: 'drum_call_failure',
+                type: 'การวิเคราะห์พฤติกรรมตัวละคร',
+                title: 'ฉากกลองศึกดังก้องแต่ไร้ผู้ร่วมประชุม',
+                desc: 'เมื่อวัสสการพราหมณ์ส่งสัญญาณตีกลองศึก มีกษัตริย์ลิจฉวีตอบรับและเดินทางมาประชุมเพียง <b>[N]</b> องค์ (จากทั้งหมด 8 องค์) จงคำนวณหาดรรชนีความล้มเหลวของการปกครอง (คิดเป็นเปอร์เซ็นต์ของกษัตริย์ที่ไม่ยอมมาประชุม)',
+                varUnit: 'องค์ที่มา',
+                ansUnit: '% ไม่มาประชุม',
+                solve: (n) => {
+                    return ((8 - n) / 8) * 100;
+                },
+                formula: '$$ \\text{เปอร์เซ็นต์ความล้มเหลว} = \\frac{8 - N}{8} \\times 100\\% $$'
+            },
+            {
+                id: 'samakhit_moral_index',
+                type: 'การสังเคราะห์คติธรรม',
+                title: 'ประเมินดรรชนีความสมัครสมานสามัคคี',
+                desc: 'หากนักเรียนจัดกิจกรรมส่งเสริมสมานัตตตาในชั้นเรียน โดยมีสมาชิกเข้าร่วม <b>[N]</b> คน และทุกคนยึดมั่นในความสามัคคีเพิ่มความเข้มแข็งให้กลุ่มคนละ 15 คะแนน จงหาคะแนนความเข้มแข็งรวมของกลุ่ม',
+                varUnit: 'คน',
+                ansUnit: 'คะแนนความเข้มแข็ง',
+                solve: (n) => {
+                    return n * 15;
+                },
+                formula: '$$ \\text{คะแนนความเข้มแข็งรวม} = N \\times 15 = [N] \\times 15 $$'
+            },
+            {
+                id: 'rasa_literature_eval',
+                type: 'วิเคราะห์รสวรรณคดีไทย',
+                title: 'ประเมินรสวรรณคดี พิโรธรงสัจ และสัลลาปังคพิสัย',
+                desc: 'ในฉากกษัตริย์ลิจฉวีโต้เถียงกันด้วยความโกรธ (พิโรธรงสัจ) <b>[N]</b> ฉาก จงหาจำนวนข้อคิดเตือนใจที่ได้รับ โดยสกัดข้อคิดฉากละ 2 ประการ',
+                varUnit: 'ฉาก',
+                ansUnit: 'จำนวนข้อคิด',
+                solve: (n) => {
+                    return n * 2;
+                },
+                formula: '$$ \\text{จำนวนข้อคิดรวม} = N \\times 2 = [N] \\times 2 \\text{ ประการ} $$'
+            }
+        ];
+
+        // Updated example data with academic & literary language
+        const exampleData = [
+            {
+                type: 'การวิเคราะห์กลวิธีทางวรรณศิลป์',
+                title: 'การเลือกใช้ฉันท์ให้สอดคล้องกับอารมณ์เรื่อง',
+                q: 'วิเคราะห์ว่าเหตุใด ชิต บุรฉัตร จึงเลือกใช้ "สัททุลวิกกีฬิตฉันท์ 19" ในตอนที่วัสสการพราหมณ์กราบทูลเนรเทศตนเอง และใช้ "จิตรปทาฉันท์ 8" ในฉากตีกลองศึก',
+                visual: '<div class="p-4 bg-purple-50 rounded-lg text-purple-900 border border-purple-200 text-xs sm:text-sm font-serif"><b>ตัวอย่างบทฉันท์:</b><br>"เครียดแค้นขุ่นเคืองรำคาญ... บมีสบอารมณ์"<br><span class="text-xs text-purple-600 block mt-1">-> ใช้สัททุลวิกกีฬิตฉันท์ แสดงอารมณ์กริ้ว โกรธ และเคร่งขรึม</span></div>',
+                method: '$$ \\text{ความสอดคล้อง} = \\text{ลีลาคำประพันธ์ (รสวรรณคดี)} + \\text{อารมณ์ของตัวละคร} $$ $$ \\text{สัททุลวิกกีฬิตฉันท์ 19} \\rightarrow \\text{แสดงความสง่างาม เคร่งขรึม โกรธขึ้ง} $$ $$ \\text{จิตรปทาฉันท์ 8} \\rightarrow \\text{แสดงความตื่นเต้น กระฉับกระเฉง เร้าใจ} $$'
+            },
+            {
+                type: 'การวิเคราะห์จิตวิทยาตัวละคร',
+                title: 'การใช้กลอุบายทำลายความไว้วางใจ',
+                q: 'วัสสการพราหมณ์ใช้วิธีเรียกพระโอรสเข้าไปพบทีละคน แล้วถามคำถามไร้สาระ เช่น "ชาวนาไถนาใช้กี่ตัว" ส่งผลต่อการสร้างความสงสัยในหมู่พระโอรสอย่างไร?',
+                visual: '<div class="p-4 bg-pink-50 rounded-lg text-pink-900 border border-pink-200 text-xs sm:text-sm font-serif"><b>กลยุทธ์เสี้ยมสอน:</b><br>"ความลับที่ไม่มีอยู่จริง" ยิ่งสร้างความระแวงเมื่อถูกปกปิด<br><span class="text-xs text-pink-600 block mt-1">-> เปลี่ยนจากมิตรภาพเป็นความริษยาและเคลือบแคลงใจ</span></div>',
+                method: '$$ \\text{กระบวนการทำลายความไว้วางใจ} = \\text{สร้างความสงสัย} \\rightarrow \\text{ไร้การเปิดเผย} \\rightarrow \\text{คิดระแวงไปเอง} $$ $$ \\text{ความระแวง} \\times \\text{การขาดสติ} = \\text{การแตกความสามัคคี} $$'
+            },
+            {
+                type: 'การประเมินคติธรรมและสังคม',
+                title: 'การละเลยหลักอปริหานิยธรรม 7',
+                q: 'วิเคราะห์ความบกพร่องของกษัตริย์ลิจฉวีที่ไม่ยอมมาร่วมประชุมเมื่อเสียงกลองศึกดังขึ้น สอดคล้องกับการละเลยหลักธรรมข้อใด และเกิดผลเสียอย่างไร?',
+                visual: '<div class="p-4 bg-fuchsia-50 rounded-lg text-fuchsia-900 border border-fuchsia-200 text-xs sm:text-sm font-serif"><b>ข้อคิดสำคัญ:</b><br>"ต่างองค์นำความทอดทิ้งภาระ... เมืองเวสาลีจึงพินาศ"<br><span class="text-xs text-fuchsia-600 block mt-1">-> การขาดสมานัตตตาและการไม่ประชุมพร้อมเพรียงกัน</span></div>',
+                method: '$$ \\text{ข้อธรรมที่ละเลย} = \\text{อปริหานิยธรรม ข้อ 1 และ 2 (ประชุมกันหมั่นเนืองนิตย์และพร้อมเพรียง)} $$ $$ \\text{ผลลัพธ์} = \\text{บ้านเมืองไร้เกราะป้องกัน} \\rightarrow \\text{พ่ายแพ้สงครามโดยไม่ต้องออกแรง} $$'
+            },
+            {
+                type: 'การสังเคราะห์คุณค่าสู่ชีวิตจริง',
+                title: 'ถอดบทเรียนเรื่อง "ข่าวลือ" ในสังคมยุคดิจิทัล',
+                q: 'นำข้อคิดจากพฤติกรรมกษัตริย์ลิจฉวีที่หูเบามาสังเคราะห์เป็นแนวทางปฏิบัติตนในการรับฟังข่าวสารในสื่อสังคมออนไลน์ (Fake News)',
+                visual: '<div class="p-4 bg-purple-50 rounded-lg text-purple-900 border border-purple-200 text-xs sm:text-sm font-serif"><b>การประยุกต์ใช้:</b><br>ฟังความข้างเดียว + ขาดกาลามสูตร = ตกเป็นเหยื่อกลอุบาย<br><span class="text-xs text-purple-600 block mt-1">-> ต้องใช้วิจารณญาณ ตรวจสอบข้อเท็จจริงก่อนเชื่อ</span></div>',
+                method: '$$ \\text{ภูมิคุ้มกันข่าวลือ} = \\text{กาลามสูตร 10} + \\text{สติปัญญา} + \\text{การตรวจสอบแหล่งข่าว} $$ $$ \\text{บทเรียนจากวรรณคดี} \\rightarrow \\text{หยุดปะทะ ยึดหลักเหตุผล ป้องกันสังคมแตกแยก} $$'
+            },
+            {
+                type: 'การวิเคราะห์เปรียบเทียบแนวคิด',
+                title: 'เปรียบเทียบปัญญาของวัสสการพราหมณ์กับกษัตริย์ลิจฉวี',
+                q: 'เหตุใดปัญญาที่ใช้ในทางที่ผิดของวัสสการพราหมณ์จึงประสบผลสำเร็จเหนือความพรั่งพร้อมด้านกำลังทหารของกษัตริย์ลิจฉวี?',
+                visual: '<div class="p-4 bg-pink-50 rounded-lg text-pink-900 border border-pink-200 text-xs sm:text-sm font-serif"><b>การวิเคราะห์ปัญญา:</b><br>"ปัญญาทางทุจริต" ใช้โจมตีจุดอ่อนทางจิตวิทยา ย่อมชนะกำลังกายที่ไร้ความสามัคคี</div>',
+                method: '$$ \\text{ปัญญาเชิงกลอุบาย} > \\text{กำลังทหารที่แตกความสามัคคี} $$ $$ \\text{ข้อคิด} = \\text{ปัญญาต้องคู่กับคุณธรรม หากขาดคุณธรรมปัญญาจะกลายเป็นภัย} $$'
+            }
+        ];
+
+        // --- MATHJAX UTILS ---
+        let mathJaxLoading = false;
+
+        function typesetMath(container = null) {
+            if (window.MathJax) {
+                mathJaxLoading = true;
+                const target = container || document.body;
+
+                if (container) {
+                    container.classList.add('mathjax-loading');
+                }
+
+                MathJax.typesetPromise([target]).then(() => {
+                    mathJaxLoading = false;
+                    if (container) {
+                        container.classList.remove('mathjax-loading');
+                    }
+                }).catch((err) => {
+                    mathJaxLoading = false;
+                    if (container) {
+                        container.classList.remove('mathjax-loading');
+                    }
+                    console.warn('MathJax rendering error:', err);
+                });
+            }
+        }
+
+        // --- NAVIGATION ---
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            window.scrollTo(0, 0);
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.remove('open');
+
+            if (id === 'learn') {
+                renderExamples();
+            } else {
+                setTimeout(typesetMath, 50);
+            }
+        }
+
+        // Toggle Solution Function
+        function toggleSolution(index) {
+            const solDiv = document.getElementById(`sol-${index}`);
+            const btn = document.getElementById(`btn-sol-${index}`);
+
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                solDiv.classList.add('fade-in');
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash mr-2"></i>ซ่อนบทวิเคราะห์';
+                btn.classList.replace('bg-pink-100', 'bg-slate-200');
+                btn.classList.replace('text-fuchsia-700', 'text-slate-700');
+                // Ensure MathJax renders if not already
+                typesetMath(solDiv);
+            } else {
+                solDiv.classList.add('hidden');
+                solDiv.classList.remove('fade-in');
+                btn.innerHTML = '<i class="fa-solid fa-eye mr-2"></i>แสดงบทวิเคราะห์';
+                btn.classList.replace('bg-slate-200', 'bg-pink-100');
+                btn.classList.replace('text-slate-700', 'text-fuchsia-700');
+            }
+        }
+
+        // --- RENDER LEARN SECTION ---
+        function renderExamples() {
+            const container = document.getElementById('examples-container');
+            container.innerHTML = exampleData.map((ex, idx) => {
+                const visualContent = ex.visual ? ex.visual : '<i class="fa-solid fa-scroll text-6xl text-purple-300"></i>';
+
+                return `
+                <div class="bg-white p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl shadow-sm border border-pink-100 hover:shadow-md transition" role="article" aria-label="ตัวอย่างที่ ${idx + 1}: ${ex.title}">
+                    <div class="flex items-center justify-between mb-2 sm:mb-3 flex-wrap gap-2">
+                        <span class="bg-fuchsia-100 text-fuchsia-800 text-xs font-bold px-2 sm:px-3 py-1 rounded-full" aria-label="ประเภท: ${ex.type}">${ex.type}</span>
+                        <span class="text-purple-400 text-xs sm:text-sm font-semibold">กรณีศึกษา ${idx + 1}</span>
+                    </div>
+                    <h4 class="font-bold text-sm sm:text-base text-purple-950 mb-2">${ex.title}</h4>
+                    <p class="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">${ex.q}</p>
+                    <div class="mb-3 sm:mb-4 flex justify-center bg-purple-50/50 rounded-lg p-3 overflow-hidden">
+                       ${visualContent}
+                    </div>
+                    
+                    <button id="btn-sol-${idx}" onclick="toggleSolution(${idx})" class="w-full bg-pink-100 text-fuchsia-700 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-pink-200 transition mb-2">
+                        <i class="fa-solid fa-eye mr-2"></i>แสดงบทวิเคราะห์
+                    </button>
+
+                    <div id="sol-${idx}" class="hidden bg-slate-50 p-2 sm:p-3 rounded-lg border border-slate-200 transition-all duration-300">
+                        <p class="text-xs text-purple-900 font-bold mb-1"><i class="fa-solid fa-feather-pointed text-fuchsia-600 mr-1"></i>วิเคราะห์แนวคิดและสรุปคำตอบ:</p>
+                        <div class="text-slate-800 text-xs sm:text-sm mathjax-loading">
+                            ${ex.method}
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            typesetMath(container);
+        }
+
+        // --- UTILS ---
+        function getRandomScenarios(count) {
+            let shuffled = [...scenariosBase].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function formatDesc(desc, nVal) {
+            // Replace [N]
+            let formatted = desc;
+            if (formatted.includes('<b>[N]</b>')) {
+                formatted = formatted.replace('<b>[N]</b>', `<span class="text-fuchsia-600 font-bold text-base sm:text-lg underline decoration-dashed">${nVal || '?'}</span>`);
+            }
+            if (formatted.includes('[N]')) {
+                formatted = formatted.replace('[N]', `${nVal || '?'}`);
+            }
+            return formatted;
+        }
+
+        // --- QUIZ LOGIC ---
+        function createQuizCardHTML(scenario, index, isSolo = false) {
+            const cardId = isSolo ? `solo-0` : `group-${index}`;
+            const title = isSolo ? 'ภารกิจวิเคราะห์รายบุคคล' : `กลุ่มเรียนที่ ${index + 1}`;
+            const inputLabel = isSolo ? 'เลขที่ประจำตัว / ตัวเลขสุ่มโจทย์ [N]' : 'ผลรวมเลขที่สมาชิกกลุ่ม / ตัวเลขสุ่มโจทย์ [N]';
+
+            // Check for Visual
+            let visualHTML = '';
+            if (scenario.visual) {
+                visualHTML = `<div class="mb-3 flex justify-center" id="visual-${cardId}">${scenario.visual}</div>`;
+            }
+
+            return `
+            <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-pink-200 overflow-hidden" id="card-${cardId}" role="article" aria-label="${title}">
+                <div class="bg-gradient-to-r ${isSolo ? 'from-purple-600 to-fuchsia-600' : 'from-pink-500 via-purple-500 to-fuchsia-600'} p-3 sm:p-4 text-white flex justify-between items-center flex-wrap gap-2">
+                    <h3 class="font-bold text-base sm:text-lg"><i class="fa-solid ${isSolo ? 'fa-user-gear' : 'fa-users-gear'} mr-1 sm:mr-2" aria-hidden="true"></i>${title}</h3>
+                    <span class="text-xs bg-white/20 px-2.5 py-1 rounded-full text-white font-medium" aria-label="ประเภท: ${scenario.type}">${scenario.type}</span>
+                </div>
+                
+                <div class="p-4 sm:p-5 md:p-6">
+                    ${visualHTML}
+                    <div class="min-h-[60px] sm:min-h-[80px] mb-3 sm:mb-4 text-slate-700 text-xs sm:text-sm leading-relaxed" id="desc-${cardId}" aria-live="polite">
+                        ${formatDesc(scenario.desc, null)}
+                    </div>
+
+                    <div class="space-y-3 sm:space-y-4">
+                        <!-- Input Variable -->
+                        <div>
+                            <label for="input-n-${cardId}" class="block text-xs font-semibold text-purple-900 mb-1">${inputLabel}</label>
+                            <input type="number" id="input-n-${cardId}" class="w-full bg-purple-50/50 border border-purple-200 rounded-lg px-3 py-2.5 sm:py-2 text-slate-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 transition" placeholder="ระบุตัวเลขลงในโจทย์ [N]..." oninput="updateQuestionText('${cardId}', '${scenario.id}')" aria-label="${inputLabel}" onkeypress="if(event.key==='Enter') document.getElementById('input-ans-${cardId}').focus()">
+                        </div>
+
+                        <!-- Input Answer -->
+                        <div>
+                            <label for="input-ans-${cardId}" class="block text-xs font-semibold text-purple-900 mb-1">ผลการวิเคราะห์/หมายเลขทางเลือก (${scenario.ansUnit})</label>
+                            <input type="number" id="input-ans-${cardId}" step="0.01" class="w-full bg-purple-50/50 border border-purple-200 rounded-lg px-3 py-2.5 sm:py-2 text-slate-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 transition" placeholder="ระบุคำตอบวิเคราะห์..." aria-label="คำตอบที่ได้ในหน่วย ${scenario.ansUnit}" onkeypress="if(event.key==='Enter') checkAnswer('${cardId}', '${scenario.id}')">
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer('${cardId}', '${scenario.id}')" class="flex-1 bg-purple-950 text-white py-2.5 sm:py-2 rounded-lg font-medium hover:bg-purple-900 active:scale-95 transition shadow-md text-sm sm:text-base focus:ring-2 focus:ring-purple-400" aria-label="ส่งการวิเคราะห์">
+                                <i class="fa-solid fa-paper-plane mr-2" aria-hidden="true"></i>ส่งการวิเคราะห์
+                            </button>
+                            <button onclick="clearQuizCard('${cardId}')" class="bg-slate-200 text-slate-700 px-4 py-2.5 sm:py-2 rounded-lg font-medium hover:bg-slate-300 active:scale-95 transition shadow-sm text-sm sm:text-base focus:ring-2 focus:ring-slate-400" aria-label="รีเซ็ต">
+                                <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Result Area -->
+                    <div id="result-${cardId}" class="hidden mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-slate-100" aria-live="polite" aria-atomic="true"></div>
+                </div>
+            </div>
+            `;
+        }
+
+        // Store current scenarios in memory
+        let currentScenarios = {};
+
+        function setupGroupQuiz() {
+            showSection('group-quiz');
+            const container = document.getElementById('group-quiz-container');
+            container.innerHTML = '';
+            currentScenarios = {};
+
+            const scenarios = getRandomScenarios(4);
+
+            scenarios.forEach((sc, idx) => {
+                const key = `group-${idx}`;
+                currentScenarios[key] = sc;
+                container.innerHTML += createQuizCardHTML(sc, idx, false);
+            });
+            typesetMath();
+        }
+
+        function setupSoloQuiz() {
+            showSection('solo-quiz');
+            const container = document.getElementById('solo-quiz-container');
+            container.innerHTML = '';
+            currentScenarios = {};
+
+            const sc = getRandomScenarios(1)[0];
+            const key = `solo-0`;
+            currentScenarios[key] = sc;
+            container.innerHTML = createQuizCardHTML(sc, 0, true);
+            typesetMath();
+        }
+
+        function updateQuestionText(cardId, scenarioId) {
+            const val = document.getElementById(`input-n-${cardId}`).value;
+            const scenario = currentScenarios[cardId];
+
+            if (val && scenario) {
+                // Update Description
+                document.getElementById(`desc-${cardId}`).innerHTML = formatDesc(scenario.desc, val);
+                typesetMath(document.getElementById(`desc-${cardId}`));
+
+                // Update Visual if present
+                const visualEl = document.getElementById(`visual-${cardId}`);
+                if (visualEl && scenario.visual) {
+                    visualEl.innerHTML = formatDesc(scenario.visual, val);
+                }
+            }
+        }
+
+        function clearQuizCard(cardId) {
+            document.getElementById(`input-n-${cardId}`).value = '';
+            document.getElementById(`input-ans-${cardId}`).value = '';
+
+            const scenario = currentScenarios[cardId];
+            if (scenario) {
+                document.getElementById(`desc-${cardId}`).innerHTML = formatDesc(scenario.desc, null);
+                typesetMath(document.getElementById(`desc-${cardId}`));
+
+                // Reset Visual
+                const visualEl = document.getElementById(`visual-${cardId}`);
+                if (visualEl && scenario.visual) {
+                    visualEl.innerHTML = formatDesc(scenario.visual, null);
+                }
+            }
+
+            const resultDiv = document.getElementById(`result-${cardId}`);
+            resultDiv.classList.add('hidden');
+            resultDiv.innerHTML = '';
+
+            document.getElementById(`input-n-${cardId}`).focus();
+        }
+
+        function checkAnswer(cardId, scenarioId) {
+            const nVal = parseFloat(document.getElementById(`input-n-${cardId}`).value);
+            const userAns = parseFloat(document.getElementById(`input-ans-${cardId}`).value);
+            const resultDiv = document.getElementById(`result-${cardId}`);
+            const scenario = currentScenarios[cardId];
+            const cardElement = document.getElementById(`card-${cardId}`);
+
+            if (isNaN(nVal) || isNaN(userAns)) {
+                alert("กรุณากรอกข้อมูลตัวเลขให้ครบถ้วนก่อนส่งการวิเคราะห์ครับ");
+                return;
+            }
+
+            // Calculate Correct Answer
+            const correctAns = scenario.solve(nVal);
+            const diff = Math.abs(correctAns - userAns);
+            const isCorrect = diff <= 0.05; // Slightly lenient for rounding
+
+            // Add visual feedback to card
+            if (isCorrect) {
+                cardElement.classList.add('result-correct');
+                setTimeout(() => cardElement.classList.remove('result-correct'), 600);
+            } else {
+                cardElement.classList.add('result-incorrect');
+                setTimeout(() => cardElement.classList.remove('result-incorrect'), 500);
+            }
+
+            // HTML for Result with enhanced animations
+            let html = '';
+            if (isCorrect) {
+                html = `
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-fuchsia-300 rounded-lg p-3 sm:p-4 text-center result-correct shadow-lg">
+                        <div class="result-icon">
+                            <i class="fa-solid fa-award text-fuchsia-600 text-3xl sm:text-4xl mb-2 animate-bounce"></i>
+                        </div>
+                        <h4 class="text-purple-950 font-bold text-base sm:text-lg mb-1">🎉 ยอดเยี่ยมมาก! ถอดรหัสวรรณคดีถูกต้อง 🎉</h4>
+                        <p class="text-xs sm:text-sm text-fuchsia-700 mt-1">ค่าดรรชนีวิเคราะห์ที่ถูกต้องคือ <strong>${correctAns.toFixed(2)}</strong> ${scenario.ansUnit}</p>
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div class="bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-300 rounded-lg p-3 sm:p-4 text-center result-incorrect shadow-lg">
+                        <div class="result-icon">
+                            <i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl sm:text-4xl mb-2"></i>
+                        </div>
+                        <h4 class="text-red-700 font-bold text-base sm:text-lg mb-1">❌ ผลการวิเคราะห์ยังไม่ถูกต้อง ลองทบทวนใหม่นะครับ</h4>
+                        <p class="text-xs sm:text-sm text-red-600">ค่าคำตอบที่ถูกต้องคือ <strong>${correctAns.toFixed(2)}</strong> ${scenario.ansUnit}</p>
+                        <p class="text-xs text-slate-500 mt-1">ผลที่คุณระบุ: <strong>${userAns.toFixed(2)}</strong></p>
+                    </div>
+                `;
+            }
+
+            // Show Solution Logic
+            html += `
+                <div class="mt-3 sm:mt-4 bg-purple-50/60 p-3 sm:p-4 rounded-lg border border-purple-200 text-left text-xs sm:text-sm">
+                    <p class="font-bold text-purple-950 mb-2"><i class="fa-solid fa-feather-pointed text-fuchsia-600 mr-1" aria-hidden="true"></i>แนวทางการวิเคราะห์และคำนวณ:</p>
+                    <p class="text-slate-600 mb-2">แทนค่าตัวแปรในสถานการณ์ N = <strong>${nVal}</strong></p>
+                    <div class="text-purple-950 bg-white p-3 rounded-lg border-2 border-purple-200 text-center text-sm sm:text-base md:text-lg my-3 overflow-x-auto mathjax-loading font-bold">
+                        ${scenario.formula}
+                    </div>
+                    <p class="text-slate-700 text-center text-xs sm:text-sm mt-2">คำนวณได้ผลลัพธ์ = <strong class="text-fuchsia-700 text-base font-bold">${correctAns.toFixed(2)}</strong> ${scenario.ansUnit}</p>
+                </div>
+            `;
+
+            resultDiv.innerHTML = html;
+            resultDiv.classList.remove('hidden');
+
+            setTimeout(() => {
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+
+            const formulaDiv = resultDiv.querySelector('.mathjax-loading');
+            if (formulaDiv) {
+                typesetMath(formulaDiv);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.MathJax) {
+                MathJax.config = {
+                    ...MathJax.config,
+                    'HTML-CSS': {
+                        ...MathJax.config['HTML-CSS'],
+                        linebreaks: { automatic: true, width: 'container' }
+                    },
+                    'SVG': {
+                        ...MathJax.config['SVG'],
+                        linebreaks: { automatic: true, width: 'container' }
+                    }
+                };
+            }
+            typesetMath();
+        });
+    </script>
+</body>
+
+</html>
